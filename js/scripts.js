@@ -1,13 +1,6 @@
-// jQuery
-$(document).ready(function(){
-//    viewAdmin.init();
-    ko.applyBindings(new ViewModel());
-});
-
-
-
 /* ================== Model ================== */
-var Model = {
+// Populate with data from API
+var Model = { // !!! append in yelp results
   currentLocation: null,
   locations: [
     {
@@ -28,27 +21,90 @@ var ViewModel = function(){
   // Set current location to first location in list
   Model.currentLocations = Model.locations[0];
 
+  //var $yelpElem = $('#yelp-container');
+
+}// // // // don't delete
+/* ================= END ================= */
+ko.applyBindings(new ViewModel);
+
+
+
+
+/* ================== Yelp API ================== */
+//      consumerKey : "O4TWkchDgxhEZ4BAuik58Q",
+//      consumerSecret : "oclsX-hgESG3CNhZS-stNgCfkeM",
+//      accessToken : "DlGK8nrNDeGVN9t2Srsa_Jxv3Fme6HSW",
+//      accessTokenSecret : "OnilwH0cbLdrdcLXU3vgXdTxhjA",
+function nonce_generate() {
+  return (Math.floor(Math.random() * 1e12).toString());
 };
 
-/* ================== ListView ================== */
+function getYelpData(item){
 
-var View = {
+  var placeSearch = $('#yelp-container').val();
+  var $yelpElem = $('#yelp-results');
 
-};
+  var auth = {
+    consumerKey : "O4TWkchDgxhEZ4BAuik58Q",
+    consumerSecret : "oclsX-hgESG3CNhZS-stNgCfkeM",
+    accessToken : "DlGK8nrNDeGVN9t2Srsa_Jxv3Fme6HSW",
+    accessTokenSecret : "OnilwH0cbLdrdcLXU3vgXdTxhjA"
+  };
+  var parameters = {
+    oauth_consumer_key: auth.consumerKey,
+    oauth_token: auth.accessToken,
+    oauth_nonce: nonce_generate(),
+    oauth_timestamp: Math.floor(Date.now()/1000),
+    oauth_signature_method: 'HMAC-SHA1',
+    callback: null
+  };
+  var oauth_signature = oauthSignature.generate('GET', yelp_url, parameters, auth.consumerSecret, auth.accessTokenSecret);
+    parameters.oauth_signature = oauth_signature;
 
+  var yelp_url = 'https://api.yelp.com/v2/search/?term=Food Co-Op&location=' + placeSearch;
 
-/* ============ YELP API ============ */
+  // Yelp Timeout after 8 seconds
+  var yelpRequestTimeout = setTimeout(function() {
+      $yelpElem.text("Failed To Get Yelp Resources");
+  }, 8000);
 
+    $.ajax({
+            'url' : yelp_url,
+            'data' : parameters,
+            'dataType' : 'jsonp',
+            'jsonpCallback' : 'myCallback',
+            'cache': true
+    }).done(function(response) {
 
-
-
-
-/* ============ MAPS API ============ */
-
+            // Clears Timeout upon success
+            clearTimeout(wikiRequestTimeout);
+    });
 /*
- *
- * Utilized Google Maps Coursework in Maps API
- *
+    // Request Body - add in above for yelp
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+        // jsonp: "callback",
+        }).done(function(response) {
+            var articleList = response[1];
+
+            for (var i = 0; i < articleList.length; i++) {
+                articleStr = articleList[i];
+                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
+            };
+            // Clears Timeout upon success
+            clearTimeout(wikiRequestTimeout);
+    });
+*/
+
+};// END OF YELP API FUNCTION
+
+
+
+/* ============ Maps API ============ */
+/*
+ * Utilized Google Maps Guided Coursework in Maps API
  */
 
 // Required Global Variables
@@ -115,13 +171,14 @@ function initMap() {
 // Populate infowindow when the marker is clicked
 function populateInfoWindow(marker, infowindow) {
   // Check infowindow is not already opened on this marker
+  // !!! bug - opens on-click while 'search within' result is open
   if (infowindow.marker != marker) {
     infowindow.setContent('<div>' + marker.title + '</div>');
     infowindow.marker = marker;
     // Make sure the marker property is cleared if the infowindow is closed
-    //infowindow.addListener('closeclick', function() {
-      //infowindow.marker = null;
-    //});
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
+    });
     infowindow.open(map, marker);
   }
 }

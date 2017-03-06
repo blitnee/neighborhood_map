@@ -32,14 +32,24 @@
             <option value="TRANSIT">transit ride</option>
           </select>
           <span class="text">of</span>
-          <input id="search-within-time-text" type="text" placeholder="Ex: Ann Arbor">
+          <input id="search-within-time-text placeSearch" type="text" placeholder="Ex: Ann Arbor">
           <input id="search-within-time" type="button" value="Go">
         </div>
+        <hr>
+        <div id="yelp-container">
+          <ul id="yelp-results" class="yelp-list"></ul>
+          <div id="name" class="text">add name</div>
+          <div id="rating" class="text">add rating</div>
+          <div id="phone" class="text">add phone</div>
+          <div id="address" class="text">add address</div>
+        </div>
+
       </div>
 
       <div id="map"></div>
 
     </div>
+    <script src="js/oauth-signature-js-master/dist/oauth-signature.js"></script>
     <script src="js/libs/knockout-3.4.1.js"></script>
     <script src="js/libs/jquery-3.1.1.min.js"></script>
     <script src="js/scripts.js"></script>
