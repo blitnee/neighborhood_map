@@ -17,13 +17,12 @@ input {
 
 h1 {
   color: #525454;
-  font-size: 22px;
   margin: 0 0 10px 0;
   text-align: center;
 }
 
-#hide-listings,
-#show-listings {
+#hide-places,
+#show-places {
   width: 48%;
 }
 
@@ -51,6 +50,18 @@ hr {
   padding: 10px 10px 30px 10px;
   text-align: left;
   width: 340px;
+}
+
+.menu-head {
+  width: 100%;
+}
+
+#title {
+  font-size: 20px;
+}
+
+#hide-menu {
+  float: right;
 }
 
 #pano {
