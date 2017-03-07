@@ -21,8 +21,8 @@ h1 {
   text-align: center;
 }
 
-#hide-places,
-#show-places {
+#hideAllPlaces,
+#showAllPlaces {
   width: 48%;
 }
 
