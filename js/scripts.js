@@ -1,15 +1,26 @@
 /* ================== Model ================== */
-// Populate with data from API
-var Model = { // !!! append in yelp results
+var Model = {
   currentLocation: null,
   locations: [
     {
-      title: 'Ann Arbor',
-      location: {lat: 42.2808256, lng: -83.7430378}
+      title: 'Hyperion Coffee Co.',
+      location: {lat: 42.244785, lng: -83.608247},
+      WikiLink: ''
     },
     {
-      title: 'Ypsilanti',
-      location: {lat: 42.2411499, lng: -83.6129939}
+      title: 'Ypsilanti District Library',
+      location: {lat: 42.208097, lng: -83.615570},
+      WikiLink: ''
+    },
+    {
+      title: 'Arborland Starbucks',
+      location: {lat: 42.255688, lng: -83.688040},
+      WikiLink: ''
+    },
+    {
+      title: 'Powerhouse Gym',
+      location: {lat: 42.223436, lng: -83.620153},
+      WikiLink: ''
     }
   ]
 };
@@ -19,86 +30,15 @@ var ViewModel = function(){
   var self = this;
 
   // Set current location to first location in list
-  Model.currentLocations = Model.locations[0];
 
-  //var $yelpElem = $('#yelp-container');
+  Model.locations[0];
+
+
 
 }// // // // don't delete
-/* ================= END ================= */
 ko.applyBindings(new ViewModel);
 
 
-
-
-/* ================== Yelp API ================== */
-//      consumerKey : "O4TWkchDgxhEZ4BAuik58Q",
-//      consumerSecret : "oclsX-hgESG3CNhZS-stNgCfkeM",
-//      accessToken : "DlGK8nrNDeGVN9t2Srsa_Jxv3Fme6HSW",
-//      accessTokenSecret : "OnilwH0cbLdrdcLXU3vgXdTxhjA",
-function nonce_generate() {
-  return (Math.floor(Math.random() * 1e12).toString());
-};
-
-function getYelpData(item){
-
-  var placeSearch = $('#yelp-container').val();
-  var $yelpElem = $('#yelp-results');
-
-  var auth = {
-    consumerKey : "O4TWkchDgxhEZ4BAuik58Q",
-    consumerSecret : "oclsX-hgESG3CNhZS-stNgCfkeM",
-    accessToken : "DlGK8nrNDeGVN9t2Srsa_Jxv3Fme6HSW",
-    accessTokenSecret : "OnilwH0cbLdrdcLXU3vgXdTxhjA"
-  };
-  var parameters = {
-    oauth_consumer_key: auth.consumerKey,
-    oauth_token: auth.accessToken,
-    oauth_nonce: nonce_generate(),
-    oauth_timestamp: Math.floor(Date.now()/1000),
-    oauth_signature_method: 'HMAC-SHA1',
-    callback: null
-  };
-  var oauth_signature = oauthSignature.generate('GET', yelp_url, parameters, auth.consumerSecret, auth.accessTokenSecret);
-    parameters.oauth_signature = oauth_signature;
-
-  var yelp_url = 'https://api.yelp.com/v2/search/?term=Food Co-Op&location=' + placeSearch;
-
-  // Yelp Timeout after 8 seconds
-  var yelpRequestTimeout = setTimeout(function() {
-      $yelpElem.text("Failed To Get Yelp Resources");
-  }, 8000);
-
-    $.ajax({
-            'url' : yelp_url,
-            'data' : parameters,
-            'dataType' : 'jsonp',
-            'jsonpCallback' : 'myCallback',
-            'cache': true
-    }).done(function(response) {
-
-            // Clears Timeout upon success
-            clearTimeout(wikiRequestTimeout);
-    });
-/*
-    // Request Body - add in above for yelp
-    $.ajax({
-        url: wikiUrl,
-        dataType: "jsonp",
-        // jsonp: "callback",
-        }).done(function(response) {
-            var articleList = response[1];
-
-            for (var i = 0; i < articleList.length; i++) {
-                articleStr = articleList[i];
-                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
-            };
-            // Clears Timeout upon success
-            clearTimeout(wikiRequestTimeout);
-    });
-*/
-
-};// END OF YELP API FUNCTION
 
 
 
@@ -136,9 +76,11 @@ function initMap() {
   for (var i = 0; i < Model.locations.length; i++) {
     var position = Model.locations[i].location;
     var title = Model.locations[i].title;
+    var wikiLink = Model.locations[i].wikiLink;
     var marker = new google.maps.Marker({
       position: position,
       title: title,
+      link: wikiLink,
       animation: google.maps.Animation.DROP,
       icon: defaultIcon,
       id: i
@@ -162,10 +104,6 @@ function initMap() {
   document.getElementById('hide-places').addEventListener('click', function() {
     hideMarkers(markers);
   });
-
-  document.getElementById('search-within-time').addEventListener('click', function() {
-    searchWithinTime();
-  });
 }
 
 // Populate infowindow when the marker is clicked
@@ -173,7 +111,7 @@ function populateInfoWindow(marker, infowindow) {
   // Check infowindow is not already opened on this marker
   // !!! bug - opens on-click while 'search within' result is open
   if (infowindow.marker != marker) {
-    infowindow.setContent('<div>' + marker.title + '</div>');
+    infowindow.setContent('<div>' + marker.title + '</div> <div>' + marker.wikiLink +'</div>');
     infowindow.marker = marker;
     // Make sure the marker property is cleared if the infowindow is closed
     infowindow.addListener('closeclick', function() {
@@ -214,90 +152,5 @@ function makeMarkerIcon(markerColor) {
   return markerImage;
 }
 
-// This function allows the user to input a desired travel time, in
-// minutes, and a travel mode, and a location - and only show the listings
-// that are within that travel time (via that travel mode) of the location
-function searchWithinTime() {
-  // Initialize the distance matrix service
-  var distanceMatrixService = new google.maps.DistanceMatrixService;
-  var address = document.getElementById('search-within-time-text').value;
-  // Check to make sure the place entered isn't blank
-  if (address == '') {
-    window.alert('You must enter an address.');
-  } else {
-    hideMarkers(markers);
-    // Use the distance matrix service to calculate the duration of the
-    // routes between all our markers, and the destination address entered
-    // by the user. Then put all the origins into an origin matrix.
-    var origins = [];
-    for (var i = 0; i < markers.length; i++) {
-      origins[i] = markers[i].position;
-    }
-    var destination = address;
-    var mode = document.getElementById('mode').value;
-    // Now that both the origins and destination are defined, get all the
-    // info for the distances between them.
-    distanceMatrixService.getDistanceMatrix({
-      origins: origins,
-      destinations: [destination],
-      travelMode: google.maps.TravelMode[mode],
-      unitSystem: google.maps.UnitSystem.IMPERIAL,
-    }, function(response, status) {
-      if (status !== google.maps.DistanceMatrixStatus.OK) {
-        window.alert('Error was: ' + status);
-      } else {
-        displayMarkersWithinTime(response);
-      }
-    });
-  }
-}
 
-// This function will go through each of the results, and,
-// if the distance is LESS than the value in the picker, show it on the map.
-function displayMarkersWithinTime(response) {
-  var maxDuration = document.getElementById('max-duration').value;
-  var origins = response.originAddresses;
-  var destinations = response.destinationAddresses;
-  // Parse through the results, and get the distance and duration of each.
-  // Because there might be  multiple origins and destinations we have a nested loop
-  // Then, make sure at least 1 result was found.
-  var atLeastOne = false;
-  for (var i = 0; i < origins.length; i++) {
-    var results = response.rows[i].elements;
-    for (var j = 0; j < results.length; j++) {
-      var element = results[j];
-      if (element.status === "OK") {
-        // The distance is returned in feet, but the TEXT is in miles. If we wanted to switch
-        // the function to show markers within a user-entered DISTANCE, we would need the
-        // value for distance, but for now we only need the text.
-        var distanceText = element.distance.text;
-        // Duration value is given in seconds so we make it MINUTES. We need both the value
-        // and the text.
-        var duration = element.duration.value / 60;
-        var durationText = element.duration.text;
-        if (duration <= maxDuration) {
-          //the origin [i] should = the markers[i]
-          markers[i].setMap(map);
-          atLeastOne = true;
-          // Create a mini infowindow to open immediately and contain the
-          // distance and duration
-          var infowindow = new google.maps.InfoWindow({
-            content: durationText + ' away, ' + distanceText +
-              '<div><input type=\"button\" value=\"View Route\" onclick =' +
-              '\"displayDirections(&quot;' + origins[i] + '&quot;);\"></input></div>'
-          });
-          infowindow.open(map, markers[i]);
-          // Put this in so that this small window closes if the user clicks
-          // the marker, when the big infowindow opens
-          markers[i].infowindow = infowindow;
-          google.maps.event.addListener(markers[i], 'click', function() {
-            this.infowindow.close();
-          });
-        }
-      }
-    }
-  }
-  if (!atLeastOne) {
-    window.alert('We could not find any locations within that distance!');
-  }
-}
+

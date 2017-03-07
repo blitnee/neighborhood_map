@@ -10,8 +10,8 @@
     <div class="container">
 
     <!-- change to hamburger style -->
-      <nav class="nav-box">
-        <div class="menu-head">
+      <div class="nav-box">
+        <nav class="menu-head">
           <input id="hide-menu" type="button" value="X">
           <h1 id="title">Neighborhood Map</h1>
         </nav>
@@ -21,31 +21,9 @@
           <input id="hide-places" type="button" value="Hide Places">
         </div>
         <hr>
-        <div>
-          <span class="text"> Search within </span>
-          <select id="max-duration">
-            <option value="10">10 min</option>
-            <option value="15">15 min</option>
-            <option value="30">30 min</option>
-            <option value="60">1 hour</option>
-          </select>
-          <select id="mode">
-            <option value="DRIVING">drive</option>
-            <option value="WALKING">walk</option>
-            <option value="BICYCLING">bike</option>
-            <option value="TRANSIT">transit ride</option>
-          </select>
-          <span class="text">of</span>
-          <input id="search-within-time-text placeSearch" type="text" placeholder="Ex: Ann Arbor">
-          <input id="search-within-time" type="button" value="Go">
-        </div>
-        <hr>
-        <div id="yelp-container">
-          <ul id="yelp-results" class="yelp-list"></ul>
-          <div id="name" class="text">add name</div>
-          <div id="rating" class="text">add rating</div>
-          <div id="phone" class="text">add phone</div>
-          <div id="address" class="text">add address</div>
+        <!-- List View -->
+        <div class="places-list">
+
         </div>
 
       </div>
@@ -53,7 +31,6 @@
       <div id="map"></div>
 
     </div>
-    <script src="js/oauth.min.js"></script>
     <script src="js/libs/knockout-3.4.1.js"></script>
     <script src="js/libs/jquery-3.1.1.min.js"></script>
     <script src="js/scripts.js"></script>
