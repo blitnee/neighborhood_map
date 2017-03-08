@@ -53,7 +53,7 @@ ul {
   z-index: 1;
   background: #fff;
   border: 1px solid #525454;
-  border-radius: 3px;
+  border-radius: 2px;
   height: 100%;
   padding: 20px 10px 30px 10px;
   text-align: left;
@@ -86,10 +86,12 @@ ul {
 
 .place-title {
   color: #525454;
+  line-height: 1.5em;
 }
 
 .place-title:hover {
   color: #b8c5d1;
+  cursor: default;
 }
 
 
