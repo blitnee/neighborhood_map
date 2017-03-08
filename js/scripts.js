@@ -1,6 +1,5 @@
 /* ================== Model ================== */
-var Model = {
-  locations: [
+var places = ko.observableArray([
     {
       title: 'Ypsilanti District Library',
       location: {lat: 42.208097, lng: -83.615570},
@@ -16,8 +15,7 @@ var Model = {
       location: {lat: 42.223436, lng: -83.620153},
       wikiLink: 'Powerhouse_Gym'
     }
-  ]
-};
+  ]);
 
 
 
@@ -62,11 +60,11 @@ function initMap() {
   // Apply default and hover style on markers
   var defaultMarker = makeMarkerIcon('0091ff');
   var highlightedMarker = makeMarkerIcon('FFFF24');
-  // Takes in locations, creates array of markers on initialize
-  for (var i = 0; i < Model.locations.length; i++) {
-    var position = Model.locations[i].location;
-    var title = Model.locations[i].title;
-    var wikiLink = wikipedia(Model.locations[i].wikiLink);
+  // Takes in places, creates array of markers on initialize
+  for (var i = 0; i < places.length; i++) {
+    var position = places[i].location;
+    var title = places[i].title;
+    var wikiLink = wikipedia(places[i].wikiLink);
     var marker = new google.maps.Marker({
       position: position,
       title: title,
