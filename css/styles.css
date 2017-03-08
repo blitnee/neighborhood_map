@@ -25,15 +25,12 @@ hr {
 
 ul {
   list-style: none;
+  padding: 0;
 }
+
 .container {
   height: 100%;
   position: relative;
-}
-
-#hideAllPlaces,
-#showAllPlaces {
-  width: 48%;
 }
 
 #heading {
@@ -42,31 +39,9 @@ ul {
   display: inline-flex;
 }
 
-#map {
-  bottom:0px;
-  height: 90%;
+#title {
+  font-size: 20px;
   width: 100%;
-  position: absolute;
-}
-
-#drawer {
-  z-index: 1;
-  background: #fff;
-  border: 1px solid #525454;
-  border-radius: 2px;
-  height: 100%;
-  padding: 20px 10px 30px 10px;
-  text-align: left;
-  width: 270px;
-  position: absolute;
-  -webkit-transform: translate(-300px, 0);
-  transform: translate(-300px, 0);
-  transition: transform 0.3s ease;
-}
-
-#drawer.open {
-  -webkit-transform: translate(0, 0);
-  transform: translate(0, 0);
 }
 
 .fa-bars {
@@ -79,9 +54,35 @@ ul {
   color: #b8c5d1;
 }
 
-#title {
-  font-size: 20px;
-  width: 100%;
+#drawer {
+  z-index: 1;
+  background: #fff;
+  border: 1px solid #525454;
+  border-radius: 2px;
+  height: 100%;
+  padding: 20px 10px 30px 10px;
+  text-align: left;
+  width: 200px;
+  position: absolute;
+  -webkit-transform: translate(-300px, 0);
+  transform: translate(-300px, 0);
+  transition: transform 0.3s ease;
+}
+
+#drawer.open {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+#hideAllPlaces,
+#showAllPlaces {
+  width: 48.8%;
+}
+
+#search {
+  width: 183px;
+  padding-right: 1em;
+  margin: .5em 0 1em 0;
 }
 
 .place-title {
@@ -94,6 +95,12 @@ ul {
   cursor: default;
 }
 
+#map {
+  bottom:0px;
+  height: 90%;
+  width: 100%;
+  position: absolute;
+}
 
 #zoom-to-area-text {
   width: 70%;
