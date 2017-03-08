@@ -15,7 +15,8 @@ var places = ko.observableArray([
       location: {lat: 42.223436, lng: -83.620153},
       wikiLink: 'Powerhouse_Gym'
     }
-  ]);
+// end   model
+]);
 
 
 
@@ -36,10 +37,12 @@ ko.applyBindings(new ViewModel);
 
 
 
-/* ============ Maps API ============ */
+
 /*
  * Utilized Google Maps Guided Coursework in Maps API
  */
+
+// Google Maps API
 // Required Global Variables
 var map;
 var markers = [];
@@ -138,8 +141,7 @@ function initMap() {
       new google.maps.Size(21,34));
     return markerImage;
   }
-
-  /* ============ Wiki API ============ */
+  // Wikipedia API
   function wikipedia(wikiLink) {
     // Set Wiki request
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + wikiLink + '&format=json&callback=wikiCallback';
@@ -162,7 +164,7 @@ function initMap() {
                 console.log(wikiLink);
         });
   };
-
+// end   view
 };
 
 
