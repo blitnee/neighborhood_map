@@ -4,42 +4,53 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
     <title>Neighborhood Map</title>
   </head>
   <body>
-    <div class="container">
-
-    <!-- change to hamburger style -->
-      <div class="nav-box">
-
-        <nav class="menu-head">
-          <input id="hide-menu" type="button" value="X">
+    <main class="container">
+      <header class="header">
+        <div id="heading">
           <h1 id="title">Neighborhood Map</h1>
-        </nav>
-
+          <i id="hamburger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
+        </div>
+      </header>
+      <nav id="drawer" class="nav-box">
         <div>
           <input id="showAllPlaces" type="button" value="Show All Places">
           <input id="hideAllPlaces" type="button" value="Hide All Places">
         </div>
-
         <hr>
-
         <!-- List View -->
         <div id="places-container">
           <ul id="places-list" data-bind="foreach: Model.locations">
-            <li data-bind="text: title"></li>
+            <li data-bind="text: title" class="place-title"></li>
             <!-- add click event like in , click: $parent.setCat -->
-          <ul>
+          </ul>
         </div>
-
-      </div>
-
+      </nav>
       <div id="map"></div>
+    </main>
 
-    </div>
+    <script>
+      /*
+       * Open the drawer when the menu icon is clicked
+       */
+        var hamburger = document.querySelector('#hamburger');
+        var main = document.querySelector('main');
+        var drawer = document.querySelector('#drawer');
+
+        hamburger.addEventListener('click', function(e) {
+          drawer.classList.toggle('open');
+          e.stopPropagation();
+        });
+        main.addEventListener('click', function() {
+          drawer.classList.remove('open');
+        });
+    </script>
     <script src="js/libs/knockout-3.4.1.js"></script>
     <script src="js/libs/jquery-3.1.1.min.js"></script>
     <script src="js/scripts.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB51X5iM3h3tRq7DjF9D_JJSGzYLZts3DM&v=3&callback=initMap"></script>
+    <script async defer onerror="googleError()" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB51X5iM3h3tRq7DjF9D_JJSGzYLZts3DM&v=3&callback=initMap"></script>
   </body>
 </html>

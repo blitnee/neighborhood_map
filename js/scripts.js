@@ -1,4 +1,3 @@
-/* ================== Model ================== */
 var Model = {
   locations: [
     {
@@ -17,26 +16,7 @@ var Model = {
       wikiLink: 'Powerhouse_Gym'
     }
   ]
-
-// end   model
 };
-
-
-
-
-/* ================== ViewModel ================== */
-var ViewModel = function(marker) {
-  // Allow for access to ViewModel within Fx
-  var self = this;
-
-
-
-
-}// // // // don't delete
-ko.applyBindings(new ViewModel);
-
-
-
 
 
 
@@ -44,7 +24,6 @@ ko.applyBindings(new ViewModel);
 /*
  * Utilized Google Maps Guided Coursework in Maps API
  */
-
 // Google Maps API
 // Required Global Variables
 var map;
@@ -70,11 +49,11 @@ function initMap() {
   for (var i = 0; i < Model.locations.length; i++) {
     var position = Model.locations[i].location;
     var title = Model.locations[i].title;
-    var wikiLink = wikipedia(Model.locations[i].wikiLink);
+    var wikiLink = Model.locations[i].wikiLink;
     var marker = new google.maps.Marker({
       position: position,
       title: title,
-      content: wikiLink,
+      content: wikipedia(wikiLink),
       animation: google.maps.Animation.DROP,
       icon: defaultMarker,
       id: i
@@ -105,7 +84,8 @@ function initMap() {
     // Check infowindow is not already opened on this marker
     if (infowindow.marker != marker) {
       // !!! wikiLink does not display!
-      infowindow.setContent('<div>' + marker.title + '</div><div>' + marker.content + '</div>'); //<div><a href=' + marker.content + '></a></div>');
+      infowindow.setContent('<div>' + marker.title + '</div>' +
+                            '<div><a herf="' + marker.content + '"></a></div>');
       infowindow.marker = marker;
       // Make sure marker property is cleared if the infowindow is closed
       infowindow.addListener('closeclick', function() {
@@ -164,11 +144,37 @@ function initMap() {
         wikiLink = url;
         // Clears Timeout upon success
         clearTimeout(wikiRequestTimeout);
-                console.log(wikiLink);
+        console.log(wikiLink);
+        return wikiLink;
         });
   };
 // end   view
 };
 
 
+/* ================== ViewModel ================== */
+var ViewModel = function(marker) {
+  // Allow for access to ViewModel within Fx
+  var self = this;
 
+  /*navView: function(data, event) {
+            if (event.click) {
+                //do something different when user has shift key down
+            } else {
+                //do normal action
+            }
+        }*/
+
+};// // // // don't delete
+ko.applyBindings(new ViewModel);
+
+
+
+
+
+
+
+
+function googleError(){
+  window.alert("Could not retrieve Google Maps");
+};
