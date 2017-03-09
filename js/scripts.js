@@ -1,16 +1,28 @@
 var locations = [
-    {
-      title: 'Ypsilanti District Library',
-      location: {lat: 42.208097, lng: -83.615570},
-    },
-    {
-      title: 'Starbucks',
-      location: {lat: 42.255688, lng: -83.688040},
-    },
-    {
-      title: 'Powerhouse Gym',
-      location: {lat: 42.223436, lng: -83.620153},
-    }
+  {
+    title: 'Depot Town',
+    location: {lat: 42.246628, lng: -83.606904},
+  },
+  {
+    title: 'Powerhouse Gym',
+    location: {lat: 42.223436, lng: -83.620153},
+  },
+  {
+    title: 'Sidetrack Bar & Grill',
+    location: {lat: 42.245776, lng: -83.608948},
+  },
+  {
+    title: 'Starbucks',
+    location: {lat: 42.255688, lng: -83.688040},
+  },
+  {
+    title: 'Ypsilanti District Library',
+    location: {lat: 42.208097, lng: -83.615570},
+  },
+  {
+    title: 'Ypsilanti Food Co-Op',
+    location: {lat: 42.245109, lng: -83.608366},
+  }
 ];
 
 /*
