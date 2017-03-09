@@ -1,34 +1,23 @@
-var Model = {
-  locations: [
+var locations = [
     {
       title: 'Ypsilanti District Library',
       location: {lat: 42.208097, lng: -83.615570},
-      wikiLink: 'Ypsilanti_District_Library'
     },
     {
       title: 'Starbucks',
       location: {lat: 42.255688, lng: -83.688040},
-      wikiLink: 'Starbucks'
     },
     {
       title: 'Powerhouse Gym',
       location: {lat: 42.223436, lng: -83.620153},
-      wikiLink: 'Powerhouse_Gym'
     }
-  ]
-};
-
-
-
+];
 
 /*
  * Utilized Google Maps Guided Coursework in Maps API
  */
-// Google Maps API
-// Required Global Variables
 var map;
 var markers = [];
-
 function initMap() {
   // Style Source: Snazzy Maps (https://snazzymaps.com/)
   var styles = [
@@ -36,229 +25,163 @@ function initMap() {
       "featureType": "administrative.locality",
       "elementType": "all",
       "stylers": [
-          {
-              "hue": "#2c2e33"
-          },
-          {
-              "saturation": 7
-          },
-          {
-              "lightness": 19
-          },
-          {
-              "visibility": "on"
-          }
+        {"hue": "#2c2e33"},
+        {"saturation": 7},
+        {"lightness": 19},
+        {"visibility": "on"}
       ]
     },
     {
-        "featureType": "landscape",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#ffffff"
-            },
-            {
-                "saturation": -100
-            },
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
+      "featureType": "landscape",
+      "elementType": "all",
+      "stylers": [
+        {"hue": "#ffffff"},
+        {"saturation": -100},
+        {"lightness": 100},
+        {"visibility": "simplified"}
+      ]
     },
     {
-        "featureType": "poi",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#ffffff"
-            },
-            {
-                "saturation": -100
-            },
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "off"
-            }
-        ]
+      "featureType": "poi",
+      "elementType": "all",
+      "stylers": [
+        {"hue": "#ffffff"},
+        {"saturation": -100},
+        {"lightness": 100},
+        {"visibility": "off"}
+      ]
     },
     {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#bbc0c4"
-            },
-            {
-                "saturation": -93
-            },
-            {
-                "lightness": 31
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+        {"hue": "#bbc0c4"},
+        {"saturation": -93},
+        {"lightness": 31},
+        {"visibility": "simplified"}
+      ]
     },
     {
-        "featureType": "road",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "hue": "#bbc0c4"
-            },
-            {
-                "saturation": -93
-            },
-            {
-                "lightness": 31
-            },
-            {
-                "visibility": "on"
-            }
-        ]
+      "featureType": "road",
+      "elementType": "labels",
+      "stylers": [
+        {"hue": "#bbc0c4"},
+        {"saturation": -93},
+        {"lightness": 31},
+        {"visibility": "on"}
+      ]
     },
     {
-        "featureType": "road.arterial",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "hue": "#bbc0c4"
-            },
-            {
-                "saturation": -93
-            },
-            {
-                "lightness": -2
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
+      "featureType": "road.arterial",
+      "elementType": "labels",
+      "stylers": [
+        {"hue": "#bbc0c4"},
+        {"saturation": -93},
+        {"lightness": -2},
+        {"visibility": "simplified"}
+      ]
     },
     {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#e9ebed"
-            },
-            {
-                "saturation": -90
-            },
-            {
-                "lightness": -8
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
+      "featureType": "road.local",
+      "elementType": "geometry",
+      "stylers": [
+        {"hue": "#e9ebed"},
+        {"saturation": -90},
+        {"lightness": -8},
+        {"visibility": "simplified"}
+      ]
     },
     {
-        "featureType": "transit",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#e9ebed"
-            },
-            {
-                "saturation": 10
-            },
-            {
-                "lightness": 69
-            },
-            {
-                "visibility": "on"
-            }
-        ]
+      "featureType": "transit",
+      "elementType": "all",
+      "stylers": [
+        {"hue": "#e9ebed"},
+        {"saturation": 10},
+        {"lightness": 69},
+        {"visibility": "on"}
+      ]
     },
     {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#e9ebed"
-            },
-            {
-                "saturation": -78
-            },
-            {
-                "lightness": 67
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
+      "featureType": "water",
+      "elementType": "all",
+      "stylers": [
+        {"hue": "#e9ebed"},
+        {"saturation": -78},
+        {"lightness": 67},
+        {"visibility": "simplified"}
+      ]
     }
-];
-
+  ];
   // Create new instance of map
   map = new google.maps.Map(document.getElementById('map'), {
-    // Center map on view of Central Michigan
-    center: {lat: 43.8194703, lng: -84.7686281},
+    center: {lat: 43.8194703, lng: -84.7686281},     // Center map on view of Central Michigan
     zoom: 7,
     styles: styles,
-    // Allow user to control Map type
-    mapTypeControl: true
+    mapTypeControl: true    // Allow user to control Map type
   });
-  // Create new instance of InfoWindow
-  var largeInfowindow = new google.maps.InfoWindow();
+  //Creates the info windows to the markers.
+  var infowindow = new google.maps.InfoWindow();
   // Apply default and hover style on markers
-  var defaultMarker = makeMarkerIcon('0091ff');
-  var highlightedMarker = makeMarkerIcon('FFFF24');
+  var defaultMarker = makeMarkerIcon('edb828');
+  var highlightedMarker = makeMarkerIcon('f93011');
   // Takes in locations, creates array of markers on initialize
-  for (var i = 0; i < Model.locations.length; i++) {
-    var position = Model.locations[i].location;
-    var title = Model.locations[i].title;
-    var wikiLink = Model.locations[i].wikiLink;
+  for (var i = 0; i < locations.length; i++) {
+    var position = locations[i].location;
+    var title = locations[i].title;
     var marker = new google.maps.Marker({
       position: position,
+      map: map,       // Populate map on init
       title: title,
-      content: wikipedia(wikiLink),
       animation: google.maps.Animation.DROP,
       icon: defaultMarker,
       id: i
     });
-    // Push markers into empty marker array
+    // Push marker into markers array
     markers.push(marker);
-    // Populate info Window when marker is clicked
+    console.log(markers);
+
+    // Send markers through to getWiki for infoWindow
+    getWiki(marker);
+
+    // Assign locations to marker for filtering
+    locations[i].marker = marker;
+
+    // Calls populateInfoWindow when marker is clicked
     marker.addListener('click', function() {
-      populateInfoWindow(this, largeInfowindow);
+      populateInfoWindow(this, infowindow);
     });
     // Default color displayed when marker not observed
     marker.addListener('mouseout', function() {
-      this.setIcon(defaultMarker);
+  	  	this.setIcon(defaultMarker);
     });
     // Display highlighted color on-hover
     marker.addListener('mouseover', function() {
       this.setIcon(highlightedMarker);
     });
   }
+  // Master View Buttons
+  // Repopulate Map, zoom to fit bounds
   document.getElementById('showAllPlaces').addEventListener('click', showAllPlaces);
-
+  // Clear Map
   document.getElementById('hideAllPlaces').addEventListener('click', function() {
-    hideAllPlaces(markers);
+    hideAllPlaces(markers, infowindow);
   });
 
-  // Populate infowindow when marker is clicked
+  // Populate infowindow when the marker is clicked
   function populateInfoWindow(marker, infowindow) {
-    // Check infowindow is not already opened on this marker
-    if (infowindow.marker != marker) {
-      // !!! wikiLink does not display!
-      infowindow.setContent('<div>' + marker.title + '</div>' +
-                            '<div><a herf="' + marker.content + '"></a></div>');
-      infowindow.marker = marker;
-      // Make sure marker property is cleared if the infowindow is closed
-      infowindow.addListener('closeclick', function() {
-        infowindow.marker = null;
-      });
-      infowindow.open(map, marker);
-    }
-  }
+	// Check infowindow is not already opened on this marker
+	if (infowindow.marker != marker) {
+      infowindow.setContent('<div style="text-align: center">' + marker.title + '</div><div><a href="'
+      								+ marker.wikiLink + '">'+ marker.wikiLink +'</a></div>');
+	  infowindow.marker = marker;
+	  // Make sure the marker property is cleared if the infowindow is closed
+	  infowindow.addListener('closeclick', function() {
+	    infowindow.marker = null;
+	  });
+	    infowindow.open(map, marker);
+	  }
+	}
+
   // Display all places on-click
   // Zoom into map to fit marker bounds
   function showAllPlaces() {
@@ -267,11 +190,12 @@ function initMap() {
       markers[i].setMap(map);
       bounds.extend(markers[i].position);
     }
+    // Map fits bounds of markers on-click
     map.fitBounds(bounds);
   }
   // Hide all places on-click
   // Sets blank map on initialize
-  function hideAllPlaces(markers) {
+  function hideAllPlaces() {
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
@@ -289,15 +213,14 @@ function initMap() {
       new google.maps.Size(21,34));
     return markerImage;
   }
-  // Wikipedia API
-  function wikipedia(wikiLink) {
+
+  function getWiki(marker) {
     // Set Wiki request
-    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + wikiLink + '&format=json&callback=wikiCallback';
+    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
+    				+ marker.title + '&format=json&callback=wikiCallback';
     // Wikipedia Timeout after 8 seconds
     var wikiRequestTimeout = setTimeout(function() {
-        // append error like below!
-        //$wikiElem.text("Failed To Get Wikipedia Resources");
-        console.log('Wiki Request Timeout!');
+        window.alert('Wiki Request Timeout!');
     }, 8000);
     // Request Body
     $.ajax({
@@ -306,30 +229,41 @@ function initMap() {
       //jsonp: "callback",
       }).done(function(response) {
         var url = response[3][0];
-        wikiLink = url;
+        marker.wikiLink = url;
         // Clears Timeout upon success
         clearTimeout(wikiRequestTimeout);
-        console.log(wikiLink);
-        return wikiLink;
-        });
+        console.log(marker.wikiLink);
+      });
   };
-// end   view
 };
 
-
-/* ================== ViewModel ================== */
-var ViewModel = function(marker) {
-  // Allow for access to ViewModel within Fx
+var ViewModel = function(data) {
   var self = this;
 
-  /*navView: function(data, event) {
-            if (event.click) {
-                //do something different when user has shift key down
-            } else {
-                //do normal action
-            }
-        }*/
+  // Takes in search input for filter
+  self.filter = ko.observable('');
 
+  // Make locations an ObservableArray
+  self.items = ko.observableArray(locations);
+
+  self.filteredItems = ko.computed(function() {
+    var filter = self.filter();
+    if (!filter) {
+      for(var i = 0; i < markers.length; i++){
+        markers[i].setVisible()
+      }
+      return self.items();
+    }
+    return self.items().filter(function(i) {
+      var match= i.title.toLowerCase().indexOf(filter) > -1;
+      i.marker.setVisible(match);
+      return match;
+    });
+  });
+  // Open InfoWindow for location in list on-click
+  self.openWindow = function(location) {
+  google.maps.event.trigger(location.marker,'click');
+  };
 };// // // // don't delete
 ko.applyBindings(new ViewModel);
 

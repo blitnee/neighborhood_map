@@ -8,43 +8,50 @@
     <title>Neighborhood Map</title>
   </head>
   <body>
-    <main class="container">
-      <header class="header">
+    <div class="container">
+      <!-- HEADER -->
+      <header id="header">
         <div id="heading">
           <h1 id="title">Neighborhood Map</h1>
-          <i id="hamburger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
+          <div id="close">
+            <i id="hamburger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
+          </div>
         </div>
       </header>
+      <!-- Navigation Menu -->
       <nav id="drawer" class="nav-box">
-        <div>
+        <div class="master-btns">
           <input id="showAllPlaces" type="button" value="Show All Places">
           <input id="hideAllPlaces" type="button" value="Hide All Places">
         </div>
         <hr>
-        <!-- List View -->
         <div id="places-container">
-          <ul id="places-list" data-bind="foreach: Model.locations">
-            <li data-bind="text: title" class="place-title"></li>
-            <!-- add click event like in , click: $parent.setCat -->
-          </ul>
+          <input id="search" type="text" data-bind="textInput: filter">
+          <div class="list-container">
+            <ul id="places-list" data-bind="foreach: filteredItems">
+                <li class="place-title" data-bind="text: title, click: $root.openWindow"></li>
+            </ul>
+          </div>
         </div>
       </nav>
+      <!-- GOOGLE MAP -->
       <div id="map"></div>
-    </main>
+
+    </div>
 
     <script>
       /*
        * Open the drawer when the menu icon is clicked
        */
         var hamburger = document.querySelector('#hamburger');
-        var main = document.querySelector('main');
+        var close = document.querySelector('#close');
         var drawer = document.querySelector('#drawer');
 
         hamburger.addEventListener('click', function(e) {
           drawer.classList.toggle('open');
           e.stopPropagation();
         });
-        main.addEventListener('click', function() {
+        close.addEventListener('click', function() {
           drawer.classList.remove('open');
         });
     </script>
