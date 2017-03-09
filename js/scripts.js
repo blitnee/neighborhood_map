@@ -143,19 +143,20 @@ function initMap() {
     // Send markers through to getWiki for infoWindow
     getWiki(marker);
 
-    // Assign locations to marker for filtering
+    // Assign location to marker for filtering
     locations[i].marker = marker;
+
     // Add highlight and bounce to selected marker
     marker.addListener('click', function() {
-      if (this.getAnimation() !== null) {
+      if (this.getAnimation() != null) {
           unselectMarkers();
-         // this.setIcon(defaultMarker);
+          this.setIcon(highlightedMarker);
       } else {
           unselectMarkers();
           this.setAnimation(google.maps.Animation.BOUNCE);
           this.setIcon(highlightedMarker);
       }
-  });
+    });
     // Calls populateInfoWindow when marker is clicked
     marker.addListener('click', function() {
       populateInfoWindow(this, infowindow);
@@ -187,6 +188,8 @@ function initMap() {
     // Make sure the marker property is cleared if the infowindow is closed
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
+      marker.setIcon(defaultMarker);
+      marker.setAnimation(null);
     });
       infowindow.open(map, marker);
     }
