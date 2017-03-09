@@ -145,14 +145,24 @@ function initMap() {
 
     // Assign locations to marker for filtering
     locations[i].marker = marker;
-
+    // Add highlight and bounce to selected marker
+    marker.addListener('click', function() {
+      if (this.getAnimation() !== null) {
+          unselectMarkers();
+         // this.setIcon(defaultMarker);
+      } else {
+          unselectMarkers();
+          this.setAnimation(google.maps.Animation.BOUNCE);
+          this.setIcon(highlightedMarker);
+      }
+  });
     // Calls populateInfoWindow when marker is clicked
     marker.addListener('click', function() {
       populateInfoWindow(this, infowindow);
     });
     // Default color displayed when marker not observed
     marker.addListener('mouseout', function() {
-  	  	this.setIcon(defaultMarker);
+        this.setIcon(defaultMarker);
     });
     // Display highlighted color on-hover
     marker.addListener('mouseover', function() {
@@ -169,19 +179,25 @@ function initMap() {
 
   // Populate infowindow when the marker is clicked
   function populateInfoWindow(marker, infowindow) {
-	// Check infowindow is not already opened on this marker
-	if (infowindow.marker != marker) {
+  // Check infowindow is not already opened on this marker
+  if (infowindow.marker != marker) {
       infowindow.setContent('<div style="text-align: center">' + marker.title + '</div><div><a href="'
-      								+ marker.wikiLink + '">'+ marker.wikiLink +'</a></div>');
-	  infowindow.marker = marker;
-	  // Make sure the marker property is cleared if the infowindow is closed
-	  infowindow.addListener('closeclick', function() {
-	    infowindow.marker = null;
-	  });
-	    infowindow.open(map, marker);
-	  }
-	}
-
+                      + marker.wikiLink + '">'+ marker.wikiLink +'</a></div>');
+    infowindow.marker = marker;
+    // Make sure the marker property is cleared if the infowindow is closed
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
+    });
+      infowindow.open(map, marker);
+    }
+  }
+  // Unanimate each of the markers
+  var unselectMarkers = function() {
+    for (i = 0; i < markers.length; i++) {
+        markers[i].setAnimation(null);
+        markers[i].setIcon(defaultMarker);
+    }
+  };
   // Display all places on-click
   // Zoom into map to fit marker bounds
   function showAllPlaces() {
@@ -213,11 +229,10 @@ function initMap() {
       new google.maps.Size(21,34));
     return markerImage;
   }
-
   function getWiki(marker) {
     // Set Wiki request
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
-    				+ marker.title + '&format=json&callback=wikiCallback';
+            + marker.title + '&format=json&callback=wikiCallback';
     // Wikipedia Timeout after 8 seconds
     var wikiRequestTimeout = setTimeout(function() {
         window.alert('Wiki Request Timeout!');
@@ -264,14 +279,9 @@ var ViewModel = function(data) {
   self.openWindow = function(location) {
   google.maps.event.trigger(location.marker,'click');
   };
-};// // // // don't delete
+};
+
 ko.applyBindings(new ViewModel);
-
-
-
-
-
-
 
 
 function googleError(){
