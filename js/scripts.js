@@ -272,6 +272,12 @@ var ViewModel = function(data) {
     }
     // Map fits bounds of markers on-click
     map.fitBounds(bounds);
+    console.log('fit bounds');
+    // Add responsive bounds to keep markers center on resize
+    google.maps.event.addDomListener(window, 'resize', function() {
+      map.fitBounds(bounds);
+      console.log('re-fit bounds on resize');
+    })
   };
   // Clear Map
   self.hideAllPlaces = function(location) {
