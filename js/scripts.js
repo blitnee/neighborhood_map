@@ -222,21 +222,17 @@ function initMap() {
     // Set Wiki request
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
             + marker.title + '&format=json&callback=wikiCallback';
-    // Wikipedia Timeout after 8 seconds
-    var wikiRequestTimeout = setTimeout(function() {
-        window.alert('Wiki Request Timeout!');
-    }, 8000);
     // Request Body
     $.ajax({
       url: wikiUrl,
       dataType: "jsonp",
       //jsonp: "callback",
-      }).done(function(response) {
-        var url = response[3][0];
+      }).done(function(data) {
+        var url = data[3][0];
         marker.wikiLink = url;
-        // Clears Timeout upon success
-        clearTimeout(wikiRequestTimeout);
         console.log(marker.wikiLink);
+      }).fail(function(jqXHR, timeout) {
+          console.log('Wiki Request Timeout!');
       });
   };
 };
