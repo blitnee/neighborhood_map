@@ -182,14 +182,6 @@ function initMap() {
       this.setIcon(highlightedMarker);
     });
   }
-  // Master View Buttons
-  // Repopulate Map, zoom to fit bounds
-  document.getElementById('showAllPlaces').addEventListener('click', showAllPlaces);
-  // Clear Map
-  document.getElementById('hideAllPlaces').addEventListener('click', function() {
-    hideAllPlaces(markers, infowindow);
-  });
-
   // Populate infowindow when the marker is clicked
   function populateInfoWindow(marker, infowindow) {
   // Check infowindow is not already opened on this marker
@@ -213,24 +205,6 @@ function initMap() {
         markers[i].setIcon(defaultMarker);
     }
   };
-  // Display all places on-click
-  // Zoom into map to fit marker bounds
-  function showAllPlaces() {
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(map);
-      bounds.extend(markers[i].position);
-    }
-    // Map fits bounds of markers on-click
-    map.fitBounds(bounds);
-  }
-  // Hide all places on-click
-  // Sets blank map on initialize
-  function hideAllPlaces() {
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-    }
-  }
   // This function takes in a COLOR, and then creates a new marker
   // icon of that color. The icon will be 21 px wide by 34 high, have an origin
   // of 0, 0 and be anchored at 10, 34).
@@ -269,13 +243,10 @@ function initMap() {
 
 var ViewModel = function(data) {
   var self = this;
-
   // Takes in search input for filter
   self.filter = ko.observable('');
-
   // Make locations an ObservableArray
   self.items = ko.observableArray(locations);
-
   self.filteredItems = ko.computed(function() {
     var filter = self.filter();
     if (!filter) {
@@ -290,6 +261,25 @@ var ViewModel = function(data) {
       return match;
     });
   });
+  // Master View Buttons:
+  // Repopulate Map, zoom to fit bounds
+  self.showAllPlaces = function(location) {
+    google.maps.event.trigger(showAllPlaces,'click');
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+      bounds.extend(markers[i].position);
+    }
+    // Map fits bounds of markers on-click
+    map.fitBounds(bounds);
+  };
+  // Clear Map
+  self.hideAllPlaces = function(location) {
+    google.maps.event.trigger(hideAllPlaces,'click');
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+  };
   // Open InfoWindow for location in list on-click
   self.openWindow = function(location) {
   google.maps.event.trigger(location.marker,'click');

@@ -19,8 +19,8 @@
       <!-- Navigation Menu -->
       <nav id="drawer" class="nav-box">
         <div class="master-btns">
-          <input id="showAllPlaces" type="button" value="Show All Places">
-          <input id="hideAllPlaces" type="button" value="Hide All Places">
+          <input data-bind="click: $root.showAllPlaces" id="showAllPlaces" type="button" value="Show All Places">
+          <input data-bind="click: $root.hideAllPlaces" id="hideAllPlaces" type="button" value="Hide All Places">
         </div>
         <hr>
         <div id="places-container">
