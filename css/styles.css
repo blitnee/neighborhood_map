@@ -109,3 +109,12 @@ ul {
 #zoom-to-area {
   width: 24%;
 }
+
+.info-window {
+  text-align: center;
+}
+
+.link-failure {
+  color: red;
+  font-size: 10px;
+}

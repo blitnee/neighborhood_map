@@ -150,7 +150,6 @@ function initMap() {
     });
     // Push marker into markers array
     markers.push(marker);
-    console.log(markers);
 
     // Send markers through to getWiki for infoWindow
     getWiki(marker);
@@ -182,18 +181,26 @@ function initMap() {
       this.setIcon(highlightedMarker);
     });
   }
+  console.log(markers);
+
   // Populate infowindow when the marker is clicked
   function populateInfoWindow(marker, infowindow) {
   // Check infowindow is not already opened on this marker
   if (infowindow.marker != marker) {
-      infowindow.setContent('<div style="text-align: center">' + marker.title + '</div><div><a href="'
-                      + marker.wikiLink + '">'+ marker.wikiLink +'</a></div>');
-    infowindow.marker = marker;
+      // Checks for link on marker, removes broken link on failure
+      // Allows for individual link errors
+      if (marker.wikiLink === undefined) {
+        infowindow.setContent('<div class="info-window">' + marker.title + '</div><div class="info-window link-failure">Wikipedia connection failure</div>');
+      } else {
+        infowindow.setContent('<div class="info-window">' + marker.title + '</div><div class="info-window"><a href="'
+                + marker.wikiLink + '">'+ marker.wikiLink +'</a></div>');
+      }
+      infowindow.marker = marker;
     // Make sure the marker property is cleared if the infowindow is closed
-    infowindow.addListener('closeclick', function() {
-      infowindow.marker = null;
-      marker.setIcon(defaultMarker);
-      marker.setAnimation(null);
+      infowindow.addListener('closeclick', function() {
+        infowindow.marker = null;
+        marker.setIcon(defaultMarker);
+        marker.setAnimation(null);
     });
       infowindow.open(map, marker);
     }
@@ -228,11 +235,12 @@ function initMap() {
       dataType: "jsonp",
       //jsonp: "callback",
       }).done(function(data) {
-        var url = data[3][0];
-        marker.wikiLink = url;
-        console.log(marker.wikiLink);
+          var url = data[3][0];
+          marker.wikiLink = url;
+          console.log(marker.wikiLink);
       }).fail(function(jqXHR, timeout) {
           console.log('Wiki Request Timeout!');
+          window.alert('Wikipedia Connection Failed');
       });
   };
 };
